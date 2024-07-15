@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Image, SafeAreaView, Platform, StatusBar } from
 import introImg from '@/assets/images/intro.png';
 import { FirstButton } from '@/components/Buttons/FirstButton';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
