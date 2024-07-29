@@ -1,4 +1,5 @@
 import {
+    ActivityIndicator,
     Animated,
     GestureResponderEvent,
     Pressable,
@@ -11,6 +12,7 @@ export interface FirstButtonProps extends PressableProps {
     title: string;
     containerStyle?: any;
     textStyle?: any;
+    isLoading?: boolean;
 }
 
 const animatedValue = new Animated.Value(120);
@@ -20,7 +22,7 @@ const backgroundColor = animatedValue.interpolate({
 });
 
 export const FirstButton = (props: FirstButtonProps) => {
-    const { title, containerStyle, textStyle, onPressIn, onPressOut } = props;
+    const { title, containerStyle, textStyle, onPressIn, onPressOut, isLoading } = props;
 
     const handlePressIn = (event: GestureResponderEvent) => {
         Animated.timing(animatedValue, {
@@ -47,7 +49,11 @@ export const FirstButton = (props: FirstButtonProps) => {
     return (
         <Pressable {...props} onPressIn={handlePressIn} onPressOut={handlePressOut}>
             <Animated.View style={containerStyles}>
-                <Text style={textStyles}>{title}</Text>
+                {isLoading ? (
+                    <ActivityIndicator color='white' />
+                ) : (
+                    <Text style={textStyles}>{title}</Text>
+                )}
             </Animated.View>
         </Pressable>
     );

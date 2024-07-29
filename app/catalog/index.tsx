@@ -9,6 +9,9 @@ export default function Catalog() {
             <Link href='/address'>
                 <Text style={styles.text}>Address</Text>
             </Link>
+            <Link href='/profile'>
+                <Text style={styles.text}>Profile</Text>
+            </Link>
             <Link href='/cart'>
                 <Text style={styles.text}>Cart</Text>
             </Link>

@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Platform, StatusBar, Animated } from 'react-native';
 import introImg from '@/assets/images/intro.png';
 import { FirstButton } from '@/components/Buttons/FirstButton';
 import { Toast } from '@/components/Notifications/Toast';
 import { useToastStore } from '@/components/Notifications/ToastStore';
 import { router } from 'expo-router';
+import { ICredentials, login } from '@/api/fakeApi';
 
 const animatedValue = new Animated.Value(-50);
 const opacityValue = animatedValue.interpolate({
@@ -12,12 +13,26 @@ const opacityValue = animatedValue.interpolate({
     outputRange: [0, 1],
 });
 
+const initCredentials: ICredentials = {
+    login: '',
+    password: '',
+};
+
 export default function RootLayout() {
     const toastify = useToastStore((state) => state.toastify);
 
+    const [credentials] = useState<ICredentials>(initCredentials);
+    const [loading, setLoading] = useState<boolean>(false);
+
     const handlePressButton = () => {
+        setLoading(true);
         toastify({ duration: 3000, type: 'success', message: 'Проверка связи!xxx' });
-        router.navigate('/catalog');
+        login(credentials)
+            .then(() => {
+                router.navigate('/catalog');
+            })
+            .catch(() => {})
+            .finally(() => setLoading(false));
     };
 
     const viewStyles = {
@@ -48,6 +63,7 @@ export default function RootLayout() {
                     title='Начать'
                     containerStyle={styles.button}
                     onPress={handlePressButton}
+                    isLoading={loading}
                 />
             </View>
             <Toast />
