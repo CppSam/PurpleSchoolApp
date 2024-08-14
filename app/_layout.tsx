@@ -1,15 +1,13 @@
 import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Platform, StatusBar } from 'react-native';
-import introImg from '@/assets/images/intro.png';
-import { FirstButton } from '@/components/Buttons/FirstButton';
+import { SplashScreen, Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
+const RootLayout = () => {
     const [loaded] = useFonts({
+        AbrilFatface: require('../assets/fonts/AbrilFatface-Regular.ttf'),
+        RobotoFlex: require('../assets/fonts/RobotoFlex-Regular.ttf'),
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     });
 
@@ -24,51 +22,32 @@ export default function RootLayout() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Image source={introImg} style={styles.image} />
-            <View style={styles.content}>
-                <View style={styles.description}>
-                    <Text style={styles.title}>Один из самых вкусных кофе во вселенной!</Text>
-                    <Text style={styles.subtext}>
-                        Свежие зёрна, настоящая арабика и бережная обжарка
-                    </Text>
-                </View>
-                <FirstButton title='Начать' containerStyle={styles.button} />
-            </View>
-        </SafeAreaView>
+        <>
+            <StatusBar style='light' />
+            <Stack
+                screenOptions={{
+                    statusBarColor: 'black',
+                    headerShown: false,
+                    contentStyle: {
+                        backgroundColor: 'black',
+                    },
+                }}
+            >
+                <Stack.Screen name='index' />
+                <Stack.Screen name='catalog/index' />
+                <Stack.Screen
+                    name='catalog/[catalogID]'
+                    options={{
+                        title: 'testInnerFolder',
+                        presentation: 'modal',
+                    }}
+                />
+                <Stack.Screen name='address' />
+                <Stack.Screen name='cart' />
+                <Stack.Screen name='catalog' />
+            </Stack>
+        </>
     );
-}
+};
 
-const styles = StyleSheet.create({
-    container: {
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'black',
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    },
-    content: { flexGrow: 1, alignItems: 'center', justifyContent: 'space-around', gap: 16 },
-    description: {
-        gap: 16,
-    },
-    image: {
-        backgroundColor: 'red',
-        resizeMode: 'cover',
-        height: '60%',
-        width: '100%',
-    },
-    title: {
-        color: 'white',
-        fontSize: 34,
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    subtext: {
-        color: 'gray',
-        fontSize: 14,
-        textAlign: 'center',
-    },
-    button: {
-        alignSelf: 'center',
-        width: 200,
-    },
-});
+export default RootLayout;
